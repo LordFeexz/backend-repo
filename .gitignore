@@ -176,4 +176,4 @@ dist
 
 build
 
-./config/firebase.json
+config/firebase.json
