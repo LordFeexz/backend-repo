@@ -4,6 +4,9 @@ import { User, userCollection } from "../models/user";
 import { sendResponseBody } from "../entities/response";
 import ApiError from "../entities/apiError";
 import { v4 } from "uuid";
+import adminValidator from "../validation/admin";
+import { Admin, adminCollection } from "../models/admin";
+import encryption from "../utils/encryption";
 
 class ApiController {
   public async updateData(req: Request, res: Response, next: NextFunction) {
@@ -67,6 +70,29 @@ class ApiController {
         res,
         code: 201,
         message: "user created",
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public async adminLogin(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email, password } = await adminValidator.validateLogin(req.body);
+
+      const docs = await adminCollection.where("email", "==", email).get();
+      if (!docs || docs.empty)
+        throw new ApiError({ message: "invalid credentials", statusCode: 401 });
+
+      const admin = docs.docs[0].data() as Admin;
+      if (!encryption.compareData(password, admin.password))
+        throw new ApiError({ message: "invalid credentials", statusCode: 401 });
+
+      sendResponseBody({
+        res,
+        code: 200,
+        message: "login success",
+        data: encryption.createToken({ email: admin.email, id: admin.id }),
       });
     } catch (err) {
       next(err);
