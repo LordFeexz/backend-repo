@@ -6,6 +6,8 @@ class Router extends BaseRouter {
     this.router
       .post("/login", apiController.adminLogin)
       .post("/", apiController.addData)
+      .get("/", apiController.getUsers)
+      .get("/:id", apiController.getById)
       .put("/:id", apiController.updateData);
   }
 }

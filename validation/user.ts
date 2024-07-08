@@ -1,6 +1,7 @@
 import * as yup from "yup";
 import BaseValidator from "../entities/validator";
 import type { IAddUser, IParamsId } from "../interfaces/user";
+import type { IBaseQuery } from "../interfaces";
 
 class UserValidator extends BaseValidator {
   public validateAddUser = async (data: any) =>
@@ -35,6 +36,23 @@ class UserValidator extends BaseValidator {
           .default(defaultValue.email)
           .optional(),
         username: yup.string().default(defaultValue.username).optional(),
+      }),
+      data
+    );
+
+  public validateQueryGetUser = async (data: any) =>
+    await this.validate<IBaseQuery>(
+      yup.object().shape({
+        page: yup
+          .number()
+          .positive("must be a positive number")
+          .default(1)
+          .optional(),
+        limit: yup
+          .number()
+          .positive("must be a positive number")
+          .default(10)
+          .optional(),
       }),
       data
     );

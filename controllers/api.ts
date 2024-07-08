@@ -31,7 +31,6 @@ class ApiController {
         message: "user updated",
       });
     } catch (err) {
-      console.log(err);
       next(err);
     }
   }
@@ -93,6 +92,55 @@ class ApiController {
         code: 200,
         message: "login success",
         data: encryption.createToken({ email: admin.email, id: admin.id }),
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public async getUsers(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { page, limit } = await userValidator.validateQueryGetUser(
+        req.query
+      );
+
+      const docs = await userCollection
+        .limit(limit)
+        .offset((page - 1) * limit)
+        .get();
+
+      sendResponseBody(
+        {
+          res,
+          code: 200,
+          message: "get users success",
+          data: docs.docs.map((doc) => doc.data()),
+        },
+        {
+          page,
+          limit,
+          totalData: docs.size,
+          totalPage: Math.ceil(docs.size / limit),
+        }
+      );
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public async getById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+
+      const user = await userCollection.where("id", "==", id).get();
+      if (!user || user.empty)
+        throw new ApiError({ message: "user not found", statusCode: 404 });
+
+      sendResponseBody({
+        res,
+        code: 200,
+        message: "get user success",
+        data: user.docs[0].data(),
       });
     } catch (err) {
       next(err);
