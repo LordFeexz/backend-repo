@@ -9,6 +9,11 @@ import errorHandler from "../middlewares/errorHandler";
 import router from "../routes";
 import ApiError from "../entities/apiError";
 
+/**
+ * INFO
+ * here i initialize the express app for https handlers
+ */
+
 config();
 
 class App {
@@ -66,8 +71,4 @@ class App {
   }
 }
 
-const app = new App();
-
-export default app.application;
-
-app.runApp();
+new App().runApp();
