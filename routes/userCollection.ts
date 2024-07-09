@@ -1,14 +1,15 @@
 import BaseRouter from "../entities/router";
 import apiController from "../controllers/api";
+import authMiddleware from "../middlewares/authMiddleware";
 
 class Router extends BaseRouter {
   routes(): void {
     this.router
       .post("/login", apiController.adminLogin)
-      .post("/", apiController.addData)
+      .post("/", authMiddleware, apiController.addData)
       .get("/", apiController.getUsers)
       .get("/:id", apiController.getById)
-      .put("/:id", apiController.updateData);
+      .put("/:id", authMiddleware, apiController.updateData);
   }
 }
 
