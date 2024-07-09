@@ -11,10 +11,11 @@ import { onRequest } from "firebase-functions/v2/https";
 import * as logger from "firebase-functions/logger";
 import apiController from "../../controllers/api";
 import errorHandler from "../../middlewares/errorHandler";
+import authMiddleware from "../../middlewares/authMiddleware";
 
 export const fetchUserData = onRequest(async (req, res) => {
   try {
-    logger.info("fetch-user-data");
+    logger.info("fetchUserData");
     await apiController.getUsersFn(req, res);
   } catch (err) {
     errorHandler(err, req, res, () => {});
@@ -23,6 +24,8 @@ export const fetchUserData = onRequest(async (req, res) => {
 
 export const updateUserData = onRequest(async (req, res) => {
   try {
+    logger.info("updateUserData");
+    await authMiddleware.authFn(req, res);
     await apiController.updateDataFn(req, res);
   } catch (err) {
     errorHandler(err, req, res, () => {});
@@ -31,16 +34,19 @@ export const updateUserData = onRequest(async (req, res) => {
 
 export const addUserData = onRequest(async (req, res) => {
   try {
+    logger.info("addUserData");
+    await authMiddleware.authFn(req, res);
     await apiController.addDataFn(req, res);
   } catch (err) {
     errorHandler(err, req, res, () => {});
   }
 });
 
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
-
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+export const adminLogin = onRequest(async (req, res) => {
+  try {
+    logger.info("adminLogin");
+    await apiController.adminLoginFn(req, res);
+  } catch (err) {
+    errorHandler(err, req, res, () => {});
+  }
+});

@@ -21,7 +21,7 @@ class ApiController {
   }
 
   public async updateDataFn(req: Request, res: Response) {
-    const { id } = await userValidator.validateParamsId(req.params);
+    const { id } = await userValidator.validateParamsId(req.query);
 
     const docs = await userCollection.where("id", "==", id).get();
     if (!docs || docs.empty)
@@ -141,29 +141,6 @@ class ApiController {
         totalPage: Math.ceil(docs.size / limit),
       }
     );
-  }
-
-  public async getById(req: Request, res: Response, next: NextFunction) {
-    try {
-      await this.getByIdFn(req, res);
-    } catch (err) {
-      next(err);
-    }
-  }
-
-  public async getByIdFn(req: Request, res: Response) {
-    const { id } = req.params;
-
-    const user = await userCollection.where("id", "==", id).get();
-    if (!user || user.empty)
-      throw new ApiError({ message: "user not found", statusCode: 404 });
-
-    sendResponseBody({
-      res,
-      code: 200,
-      message: "get user success",
-      data: user.docs[0].data(),
-    });
   }
 }
 

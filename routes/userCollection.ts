@@ -6,10 +6,9 @@ class Router extends BaseRouter {
   routes(): void {
     this.router
       .post("/login", apiController.adminLogin)
-      .post("/", authMiddleware, apiController.addData)
+      .post("/", authMiddleware.auth, apiController.addData)
       .get("/", apiController.getUsers)
-      .get("/:id", apiController.getById)
-      .put("/:id", authMiddleware, apiController.updateData);
+      .put("/", authMiddleware.auth, apiController.updateData);
   }
 }
 
