@@ -12,7 +12,7 @@ import ApiError from "../entities/apiError";
 config();
 
 class App {
-  private readonly application: Application;
+  public readonly application: Application;
   constructor() {
     this.application = express();
     this.plugins();
@@ -66,4 +66,8 @@ class App {
   }
 }
 
-new App().runApp();
+const app = new App();
+
+export default app.application;
+
+app.runApp();

@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "ebuddy-test-6a178"
-  }
+    "default": "ebuddy-test-d899e",
+    "test": "ebuddy-test-d899e"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
 }

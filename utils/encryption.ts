@@ -13,10 +13,11 @@ class Encryption {
 
   public compareData = (data: string, hash: string) => compareSync(data, hash);
 
-  public createToken = (data: ITokenProps) => sign(data, process.env.SECRET);
+  public createToken = (data: ITokenProps) =>
+    sign(data, process.env.SECRET as string);
 
   public verifyToken = (token: string) =>
-    verify(token, process.env.SECRET) as ITokenValue;
+    verify(token, process.env.SECRET as string) as ITokenValue;
 }
 
 const encryption = new Encryption();

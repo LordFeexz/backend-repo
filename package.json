@@ -41,6 +41,8 @@
     "seed:bun:down": "bun seeders/admin.ts down",
     "seed:ts-node:down": "ts-node seeders/admin.ts down",
     "seed:node:up": "tsc && node build/seeders/admin.js up",
-    "seed:node:down": "tsc && node build/seeders/admin.js down"
-  }
+    "seed:node:down": "tsc && node build/seeders/admin.js down",
+    "serve": "cd functions && tsc && firebase emulators:start --only functions"
+  },
+  "main": "build/core/app.js"
 }
